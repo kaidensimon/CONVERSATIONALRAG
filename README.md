@@ -35,6 +35,11 @@ Set env vars (see above) in `.env`, then run:
 python -m uvicorn RAG.server:app --host 0.0.0.0 --port 5000
 ```
 
+In a seperate console, run:
+```bash
+ngrok http 5000
+```
+
 ## Docker
 Build and run (expects `.env` with keys, no quotes):
 ```bash
