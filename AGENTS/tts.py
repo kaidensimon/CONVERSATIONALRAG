@@ -2,28 +2,20 @@ from typing import AsyncGenerator
 from speechmatics.tts import AsyncClient, Voice, OutputFormat
 import asyncio
 from dotenv import load_dotenv
-load_dotenv()
-OUTPUT_FORMAT = OutputFormat.RAW_PCM_16000
-END_OF_STREAM = None
-CHUNK_SIZE = 2048 # Size of audio chunks
 import logging
-logger = logging.getLogger(__name__)
-import numpy as np
-# Buffering constants
-
-
 import asyncio
 from speechmatics.tts import AsyncClient, Voice, OutputFormat
-
+load_dotenv()
 SAMPLE_RATE = 16000
 CHANNELS = 1
 SAMPLE_WIDTH = 2  # int16 -> 2 bytes
 CHUNK_SIZE = 1024  
 BYTES_PER_CHUNK = CHUNK_SIZE * CHANNELS * SAMPLE_WIDTH
 BUFFER_SIZE = 4096
-
-
 END_OF_STREAM = None
+OUTPUT_FORMAT = OutputFormat.RAW_PCM_16000
+
+logger = logging.getLogger(__name__)
 
 async def generate_audio(text: str, audio_queue: asyncio.Queue, voice: Voice, client: AsyncClient) -> None:
         async with await client.generate(

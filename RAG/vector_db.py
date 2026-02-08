@@ -1,8 +1,14 @@
+import os
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
 import inngest
+
 class QDrantStorage:
-    def __init__(self, url="http://localhost:6333", collection="docs3", dim=3072):
+    def __init__(self, url=None, collection=None, dim=3072):
+        # Allow overriding via env vars so Docker can point to host/other container.
+        url = url or os.getenv("QDRANT_URL", "http://localhost:6333")
+        collection = collection or os.getenv("QDRANT_COLLECTION", "docs3")
+
         self.client = QdrantClient(url=url, timeout=30)
         self.collection = collection
         if not self.client.collection_exists(self.collection):

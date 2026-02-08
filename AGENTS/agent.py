@@ -30,7 +30,8 @@ class Agent:
     
     async def speech(self, text: str):
         producer = asyncio.create_task(generate_audio(text, self.queue, self.VOICE, self.tts_client))
-        conv = Pcm16kToMulaw8k(frame_ms=120)
+        # Use 50ms μ-law frames (400 bytes @8k) to match AssemblyAI/Twilio limits.
+        conv = Pcm16kToMulaw8k(frame_ms=50)
 
         try:
             async for pcm_chunk_16k in speak(self.queue):

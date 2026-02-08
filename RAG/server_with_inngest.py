@@ -1,3 +1,4 @@
+#THIS IS FOR RUNNING THIS AGENT WITH INNGEST. BENEFITS ARE RETRIES, EASIER SCALING, AND MONITROING.
 import logging
 from fastapi import FastAPI
 import inngest
@@ -16,7 +17,6 @@ import asyncio
 import os, json, base64, asyncio, logging, inspect
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import time
-import requests
 from dataclasses import dataclass
 from AGENTS.tts import speak, generate_audio
 from speechmatics.tts import AsyncClient
@@ -281,10 +281,10 @@ async def media_ws(twilio_ws: WebSocket):
                 user_content = rag_output.get("rag_result", "")
                 agent.messages.append({"role": "user", "content": user_content})
                 answer = await agent.invoke()
-                #LLM_query_event_id = await send_LLM_query_event()
-                #LLM_query_output_task = asyncio.create_task(wait_for_run_output(LLM_query_event_id))
-                #LLM_output = await LLM_query_output_task
-                #answer = LLM_output.get("answer", "")
+                LLM_query_event_id = await send_LLM_query_event()
+                LLM_query_output_task = asyncio.create_task(wait_for_run_output(LLM_query_event_id))
+                LLM_output = await LLM_query_output_task
+                answer = LLM_output.get("answer", "")
 
                 inngest_client.logger.info(f"LLM RESPONSE RECIEVED: {answer}")
 
@@ -293,7 +293,7 @@ async def media_ws(twilio_ws: WebSocket):
                         payload_b64 = base64.b64encode(mulaw_frame).decode("ascii")
                         msg = {
                             "event": "media",                    # REQUIRED: Tells Twilio this is audio
-                            "streamSid": state.streamSID,        # REQUIRED: Your stored streamSid
+                            "streamSid": state.streamSID,        # REQUIRED:  stored streamSid
                             "media": {                           # REQUIRED: Media object
                                 "payload": payload_b64,          # REQUIRED: base64 μ-law 8000Hz
                             }
