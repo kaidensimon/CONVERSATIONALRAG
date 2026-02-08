@@ -2,13 +2,10 @@ import asyncio
 from .tts import speak, generate_audio
 from speechmatics.tts import AsyncClient
 from .convert_audio import Pcm16kToMulaw8k
-import inngest
 from speechmatics.tts import Voice
 from langchain_openai import ChatOpenAI
 from .custom_types import AgentOutput
 from .system_prompts import AGENT_PROMPT
-def get_inngest_client() -> inngest.Inngest:
-    return inngest.Inngest(app_id="rag_app", is_production=False)
 
 
 
@@ -19,7 +16,6 @@ class Agent:
         self.messages = [{"role": "system", "content": AGENT_PROMPT}]
         self.tts_client = AsyncClient()
         self.queue = asyncio.Queue()
-        self.inngest_client = get_inngest_client()
         self.llm = ChatOpenAI(model="gpt-4o").with_structured_output(AgentOutput)
 
 

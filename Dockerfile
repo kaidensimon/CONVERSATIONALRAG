@@ -30,7 +30,6 @@ RUN pip install --upgrade pip \
         langchain-openai \
         speechmatics-python \
         speechmatics-tts \
-        inngest \
         flask \
         flask-sockets \
         markupsafe==2.0.0

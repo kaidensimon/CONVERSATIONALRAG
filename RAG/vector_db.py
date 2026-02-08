@@ -1,7 +1,6 @@
 import os
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
-import inngest
 
 class QDrantStorage:
     def __init__(self, url=None, collection=None, dim=3072):
