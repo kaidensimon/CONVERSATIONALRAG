@@ -13,13 +13,14 @@ import asyncio
 import os, json, base64, asyncio, logging, inspect
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from dataclasses import dataclass
+
 log = logging.getLogger("uvicorn.error")
 load_dotenv()
-
 
 ASAI_KEY = os.environ["ASAI_KEY"]
 
 # Twilio sends mu-law 8k. Configure AssemblyAI to accept mu-law 8k directly.
+
 ASAI_URL = (
     "wss://streaming.assemblyai.com/v3/ws"
     "?sample_rate=8000"
@@ -29,14 +30,10 @@ ASAI_URL = (
     "&max_turn_silence=1280"
 )
 
-
-
-
 @dataclass
 class State:
     streamSID: str = None
 
-    
 app = FastAPI()
 
 @app.get("/media")
@@ -52,8 +49,6 @@ def _ws_connect_kwargs():
     if "additional_headers" in params:
         return {"additional_headers": {"Authorization": ASAI_KEY}}
     return {"extra_headers": {"Authorization": ASAI_KEY}}
-
-
 
 
 @app.websocket("/media")
@@ -105,13 +100,6 @@ async def media_ws(twilio_ws: WebSocket):
                 await aai_ws.send(json.dumps({"type": "Terminate"}))
 
 
-
-    
-
-       
-
-    
-
         async def query_rag_no_inngest(question, top_k):
             query_vec = embed_texts([question])[0]
             store = QDrantStorage()
@@ -158,11 +146,9 @@ async def media_ws(twilio_ws: WebSocket):
                     if answer.end_turn:
                         end_turn = True
 
-                    
-                                
+                                          
             except Exception:
                 log.exception("Inngest send failed")
-
 
 
         async def aai_to_log():
@@ -179,9 +165,7 @@ async def media_ws(twilio_ws: WebSocket):
                     
                         if data.get("end_of_turn") == True:
                             asyncio.create_task(safe_send_event(data["transcript"]))
-
-
-                            
+             
 
             except Exception as e:
                 log.error("AssemblyAI read error: %s", e)
