@@ -75,12 +75,6 @@ This loads the PDF, chunks it, embeds with OpenAI, and upserts into Qdrant.
 - Ensure `.env` values are unquoted when used with `docker --env-file`.
 - Twilio/AAI expect 50–1000 ms audio frames; the code uses 50 ms frames.
 
-## Troubleshooting
-- Static/choppy audio: verify QDRANT_URL, network latency, and that you are not double-converting audio. Current pipeline sends 50 ms μ-law frames; avoid downsampling elsewhere.
-- AssemblyAI “Input Duration Violation”: ensure frame size is 50 ms (default in code).
-- Qdrant “connection refused”: set `QDRANT_URL=http://host.docker.internal:6333` when running in Docker Desktop, or use a shared Docker network if Qdrant is containerized.
-- Ngrok auth errors: remove quotes around `NGROK_AUTHTOKEN` or pass via `-e`.
-
 ## Key Files
 - `RAG/server.py` – FastAPI app, Twilio/AAI bridge.
 - `RAG/data_loader.py` – PDF loading, chunking, embedding.
